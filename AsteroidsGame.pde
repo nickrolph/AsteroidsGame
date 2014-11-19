@@ -1,20 +1,43 @@
 SpaceShip falcon9;
-Stars olion;
+Stars [] olion;
+Asteroids [] rosetta;
 public void setup() 
 { 
   size(800, 800);
   background(0);
+  
   falcon9 = new SpaceShip() ;
-  olion = new Stars();
+  olion = new Stars[500];
+  for (int i = 0; i < olion.length; ++i) 
+ {
+  olion [i] = new Stars();
+ }
+  rosetta = new Asteroids[10];
+  for (int i = 0; i < rosetta.length; ++i) 
+ {
+  rosetta [i] = new Asteroids();
+ };
   
  
 }
 public void draw() 
 {
   background(0);
-  olion.show();
+  for (int i = 0; i < olion.length; ++i) 
+ {
+  olion[i].starShow();
+ }
+   for (int i = 0; i < rosetta.length; ++i) 
+ {
+  rosetta[i].rotate(5);
+  rosetta[i].move();
+  rosetta[i].show();
+ }
+
   falcon9.move();
   falcon9.show();
+  
+  
   
 }
 class SpaceShip extends Floater  
@@ -82,6 +105,7 @@ class SpaceShip extends Floater
     return myPointDirection;
   }
 }
+
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
 {   
   protected int corners;  //the number of corners, a triangular floater has 3   
@@ -181,24 +205,104 @@ public void keyPressed()
 
     falcon9.rotate(-5);
   }
-  
+  if (key == 'h')
+  {
+    falcon9.setX((int)(Math.random() * 800));
+    falcon9.setY((int)(Math.random() * 800));
+    falcon9.setPointDirection((int)(Math.random() * 360)) ;
+    falcon9.setDirectionX(0);
+    falcon9.setDirectionY(0);
+  }
 }
 
 class Stars
 {
-  int numStars; 
-  Stars()
+  private float ellipseXC;
+  private float ellipseYC;
+  private  float ellipseX;
+  private float ellipseY;
+  public Stars()
   {
-    numStars = 500;
+   ellipseXC = (int)(Math.random()*800);
+   ellipseYC= (int)(Math.random()*800);
+   ellipseX= (int)(Math.random()*6);
+   ellipseY= (int)(Math.random()*6);
   }
-void show()
+public void starShow()
 {
-    for(int i = 0; i < numStars; ++i) 
+ fill(255);
+ ellipse(ellipseXC, ellipseYC, ellipseX, ellipseY);
+}
+
+
+
+}
+class Asteroids extends Floater
+{
+   public  Asteroids() 
+    {
+      corners = 6;
+       xCorners = new int [corners];  
+       xCorners[0]= 40;
+       xCorners[1]= 28;
+       xCorners[2]=-28;
+       xCorners[3]=0;
+       xCorners[4]= 8;
+       xCorners[5]= 36;
+       yCorners = new int [corners];
+       yCorners[0]= 0; 
+       yCorners[1]= -12;  
+       yCorners[2]= -16;  
+       yCorners[3]= 24; 
+       xCorners[4]= 18 ;
+       xCorners[5]= 28;   
+       myColor = 200;   
+       myCenterX = (int)(Math.random() * 800);
+       myCenterY = (int)(Math.random() * 800);    
+       myDirectionX = (int)(Math.random() * 7);
+       myDirectionY = (int)(Math.random() * 7); //holds x and y coordinates of the vector for direction of travel   
+     myPointDirection = (int)(Math.random() * 360);     
+    }
+ public void setX(int x) 
   {
-    fill((int)(Math.random() * 255), (int)(Math.random() * 255), (int)(Math.random() * 255));
-    ellipse((int)(Math.random() * 800), (int)(Math.random() * 800), (int)(Math.random()*6), (int)(Math.random()*6));
+    myCenterX = x;
   }
+ public int getX()
+  {
+    return (int)myCenterX;
+  }
+ public void setY(int y)
+  {
+    myCenterY = y;
+  }   
+ public int getY()
+  {
+    return (int)myCenterY;
+  }   
+ public void setDirectionX(double x)
+  {
+    myDirectionX = x;
+  } 
+ public double getDirectionX()   
+  {
+    return myDirectionX;
+  }
+ public void setDirectionY(double y) 
+  {
+    myDirectionY = y;
+  }  
+ public double getDirectionY()   
+  {
+    return myDirectionY;
+  }
+ public void setPointDirection(int degrees)
+  {
+    myPointDirection = degrees;
+  }   
+ public double getPointDirection()
+  {
+    return myPointDirection;
+  }
+
 }
 
-
-}
